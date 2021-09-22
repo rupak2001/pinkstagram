@@ -1,0 +1,53 @@
+#editpgd{
+    height: 380px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 8%;
+    border: black solid 1px;
+    background-color: beige;
+    border-radius: 3% 3% 3% 3%;
+    box-shadow: 2px;
+}
+
+#editpgd1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%;
+}
+
+#pp{
+    height: 150px;
+    width:150px;
+    border-radius: 50% 50% 50% 50%;
+    margin-bottom: 5%;
+    cursor: pointer;
+}
+
+#editpgd2,#editpgd3{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#editpgd2 >input,#editpgd3>input{
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+h4{
+    font-size: medium;
+}
+
+input{
+    height: 20px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+button{
+    background-color: aliceblue;
+    border-radius: 10px 10px 10px 10px;
+}

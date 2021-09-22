@@ -1,0 +1,138 @@
+#propinfo{
+    margin-top: 3%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 500px;
+    height: 200px;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+    
+}
+
+#propinfoppd{
+    height: 150px;
+    width: 150px;
+}
+
+#profpgud1{
+    display: flex;
+    flex-direction: column;
+    width:500px;
+    height: 120px;
+    justify-content: space-between;
+    margin-left: 15%;
+}
+
+#profpgpp{
+    margin-top: 15px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50% 50% 50% 50%;
+}
+
+#propinfod1{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+#propinfod2{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#prof_editor{
+    margin-left:25px;
+    color: black;
+    font-size: medium;
+    background-color: whitesmoke;
+    height: 40px;
+    width: 100px;
+    border-radius: 8px 8px 8px 8px;
+}
+
+#propinfod2 > h4{
+    margin-left: 20px;
+    font-size: large;
+}
+
+#profidcont{
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    background-color: whitesmoke;
+}
+
+#foll_box{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 400px;
+    background-color: white;
+    border-radius:5% 5% 5% 5%
+}
+
+#infoll_box{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 30px;
+    border-bottom: 1px solid gray;
+}
+
+#infoll_box > p{
+    margin-left: 35%;
+    font-weight: 600;
+}
+
+#infoll_box >input{
+    margin-left: 20%;
+    height: 30px;
+    width: 30px;
+    border-radius: 50% 50% 50% 50%;
+}
+#ifoll_box_msgs{
+    height: 370px;
+    width: 400px;
+    align-items: center;
+    overflow-y: auto;
+}
+
+#foll_list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items:center ;
+    height: 50px;
+    width: 390px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+#foll_list>img{
+    margin-right: 20px;
+    height: 40px;
+    width:40px;
+    border-radius: 50% 50% 50% 50%;
+}
+#accimgs{
+    height: 293px;
+    width:293px;
+    margin-bottom: 2%;
+}
+
+
+

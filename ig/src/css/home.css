@@ -1,0 +1,141 @@
+#topnav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid palevioletred;
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    height: 60px;
+    z-index: 1;
+    left: 0;
+    background-color: white;
+
+}
+.homepg{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btngrp{
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start ;
+    width:12%;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    margin-right: 5%;
+}
+
+
+#tnh2{
+    font-family: 'Dancing Script', cursive;
+    font-family: 'Style Script', cursive;
+    font-weight: 800;
+    margin-right: 5%;
+}
+
+#tna1{
+    cursor: pointer;
+}
+
+
+#tna2{
+    cursor: pointer;
+}
+
+#searchbar{
+    height: 25px;
+    border-radius: 5% 5% 5% 5%;
+    font-size: 15px;
+    text-align: center;
+    margin-left: 8rem;
+}
+
+#searchlstbx{
+    width:250px;
+    height: 300px;
+    background-color:white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-top: 60px;
+    margin-left: 7rem;
+    overflow-y: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+#searchlstbx > *{
+    margin-top: 2%;
+}
+
+.user_inf{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 50px;
+    width:245px;
+    border:rgb(168, 168, 168) 1px solid;
+    border-radius:5% 5% 5% 5%;
+}
+
+
+.user_inf >img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50% 50% 50% 50%;
+}
+
+.user_inf > p{
+    font-size: medium;
+}
+
+#errmsg{
+    margin-left: 4%;
+    font-size: larger;
+    font-weight: 700;
+}
+
+.user_inf:hover{
+    background-color:rgb(235, 235, 235) ;
+    cursor: pointer;
+}
+
+@media screen and (max-width:1100px) {
+    #searchbar{
+        margin-left: 4rem;
+    }
+    #searchlstbx{
+        margin-left: 3rem;
+    }
+}
+
+@media screen and (max-width:950px) {
+    #searchbar{
+        margin-left: 2rem;
+    }
+    #searchlstbx{
+        margin-left: 1rem;
+    }
+
+    #tnh2{
+        margin-right: 3%;
+    }
+}
+
+@media screen and (max-width:900px) {
+    .btngrp{
+        margin-right: 10%;
+    }
+}
+
+
