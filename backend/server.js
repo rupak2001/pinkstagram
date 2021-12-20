@@ -33,7 +33,7 @@ app.post('/login_post', async (req, res) => {
     var catched_data = req.body;
     usermail = catched_data.email;
     var db_data = await db.find({ email: catched_data.email }).select({ email: 1, password: 1, _id: 0 });
-
+    console.log(db_data)
     if (db_data.length === 0) {
         res.send({ chk_status: 0 });
     }
@@ -71,7 +71,8 @@ app.post("/picup_test/:email/:description", upload.single('file'), async (req, r
     }
     var ndbi = new dbi(im_dat);
     await dbi.insertMany([ndbi])
-        .then(fs.unlinkSync(__dirname + '/uploads/' + req.file.filename))
+      .then(fs.unlinkSync(__dirname + '/uploads/' + req.file.filename))
+
     var incdata = await profmod.find({ email: req.params.email }).select({ postCount: 1, _id: 0 })
     incdata = incdata[0].postCount + 1;
     await profmod.updateOne({ email: req.params.email }, { $set: { postCount: incdata } })

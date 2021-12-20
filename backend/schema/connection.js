@@ -32,9 +32,9 @@ module.exports = send_data;*/
 //mongo
 
 var mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/ig_data',{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true})
+require('dotenv').config();
+mongoose.connect('mongodb+srv://rupak:'+process.env.password+'@pinkstagram-db.2svpk.mongodb.net/pinkstagram?retryWrites=true&w=majority',{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true})
 .then(()=>{
-    console.log("connected to db");
+    console.log("db connected");
 })
 
