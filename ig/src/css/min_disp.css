@@ -1,89 +1,19 @@
-#mindisp1{
-    position: fixed;
-    top:0;
-    display: flex;
-    flex-direction: row;
-    height: 60%;
-    width: 1000px;
-    z-index: 10;
-    margin-top: 100px;
-    background-color: white;
-    justify-content: flex-start;
-}
 
-#minimg{
-    height: 524px;
-    width: 550px;
-}
-
-#mpp{
-    height: 40px;
-    width:40px;
-    border-radius: 50% 50% 50% 50%;
-}
-#mpn{
-    margin-left: 18px;
-    font-size: large;
-    font-weight: 600;
-}
-
-#minnmdiv{
-    width: 450px;
-    height:50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    border-bottom: 1px gray solid;
-}
-#minnmdiv>img{
-    margin-left: 20%;
-}
-
-#mindisp3{
-    display: flex;
-    width: 450px;
-    height:50px;
-    flex-direction: row;
-    justify-content: center;
-    align-content: center;
-}
-#commentsmin{
-    min-height: 0;
-    width:450px;
-    height:416px;
-    overflow-y: auto;
-}
-
-#mindisp3>input{
-    width:398px;
-    height:40px;
-}
-#mindisp3>button{
-    width:50px;
-    height:44px;
-    background-color: white;
-    color: darkblue;
-    border-radius: 0% 0% 0% 0%;
-}
-
-#exitmin{
-    height: 20px;
-    width: 20px;
-    margin-left: 25%;
-}
 
 #mincomdiv{
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-top:1px rgb(223, 220, 220) solid ;
+    border-bottom:1px rgb(218, 214, 214) solid ;
 }
 
 #mincomimg{
-    height: 20px;
-    width: 20px;
+    height: 25px;
+    width: 25px;
     border-radius: 50% 50% 50% 50%;
     object-fit: cover;
     margin-left: 6px;
@@ -93,7 +23,20 @@
     font-weight: 700;
     font-size: medium;
     margin-right: 5px;
+    font-family: monospace;
 }
 #mincomp2{
     font-size: medium;
+    font-family: monospace;
+}
+
+#commentsmin{
+    height:26rem;
+    overflow-y: auto;
+}
+
+@media screen and (min-width:768px) {
+    #commentsmin{
+        height: 26rem;
+    }
 }

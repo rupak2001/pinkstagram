@@ -81,7 +81,7 @@ function App() {
 
 
     return (
-        <div className="App">
+        <div className="w-screen h-screen border-0">
             {log}
         </div>
     );

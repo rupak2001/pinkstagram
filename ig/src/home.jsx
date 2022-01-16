@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import './css/home.css'
 import P_dummy from "./postdummy"
 import Pic_up from "./photo_uploader"
 import Button from '@material-ui/core/Button';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
 import Profile from './profile_pg';
 import Editpg from './edit_user_pg'
 import MinDisp from './mini_disp';
@@ -164,7 +165,6 @@ var Home = (props) => {
 
             var mincomdiv = document.createElement('div');
             mincomdiv.setAttribute('id', 'mincomdiv')
-
             var mincomimg = document.createElement('img')
             mincomimg.setAttribute('id', 'mincomimg')
             mincomimg.setAttribute('src', mincomspp)
@@ -455,7 +455,7 @@ var Home = (props) => {
                 flistup(<div id="foll_box">
                     <div id="infoll_box">
                         <p>Followers</p>
-                        <input type="image" src = "https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }}/>
+                        <input type="image" src="https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }} />
                     </div>
                     <div id="ifoll_box_msgs">
                         {info}
@@ -483,17 +483,17 @@ var Home = (props) => {
                 var info = data.map((datas) => {
                     var pimg = new Buffer(datas.profimg).toString('base64')
                     return (
-                        <div id="foll_list">
-                            <img src={"data:image/jpeg;base64," + pimg} />
+                        <div id="foll_list" >
+                            <img className = "w-4 h-4 rounded-lg" src={"data:image/jpeg;base64," + pimg} />
                             <p>{datas.name}</p>
                         </div>
                     )
                 })
 
                 flistup(<div id="foll_box">
-                    <div id="infoll_box">
+                    <div id="infoll_box" className='bg-green-400'>
                         <p>Following</p>
-                        <input type="image" src = "https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }}/>
+                        <input type="image" src="https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }} />
                     </div>
                     <div id="ifoll_box_msgs">
                         {info}
@@ -540,7 +540,7 @@ var Home = (props) => {
             .then(data => {
                 if (data.length === 0) {
                     searchup(
-                        <div id="searchlstbx">
+                        <div id="searchlstbx" className='w-80 h-80 bg-white border-2 border-pink-400/70 fixed top-0 left-0 mt-12'>
                             <br />
                             <p style={{ textAlign: "center" }}>no user found</p>
                         </div>)
@@ -553,19 +553,19 @@ var Home = (props) => {
                         if (users.email !== props.finename) {
                             if (users.isFollowed === 0) {
                                 return (
-                                    <div className="user_inf" id={users.email}>
-                                        <img onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
-                                        <p onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
-                                        <button id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
+                                    <div className="w-full  h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly" id={users.email}>
+                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
+                                        <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
+                                        <button className = "w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
                                     </div>
                                 )
                             }
                             else {
                                 return (
-                                    <div id={users.email} className="user_inf">
-                                        <img onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
-                                        <p onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
-                                        <button id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
+                                    <div id={users.email} className="w-full h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly">
+                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
+                                        <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
+                                        <button className = "w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
                                     </div>
                                 )
                             }
@@ -573,7 +573,7 @@ var Home = (props) => {
 
                     })
                     searchup(
-                        <div id="searchlstbx">
+                        <div id="searchlstbx" className='w-80 h-80 bg-white border-2 border-pink-400/70 overflow-y-auto fixed top-0 left-0 mt-12'>
                             {userdat}
                         </div>)
                 }
@@ -618,28 +618,77 @@ var Home = (props) => {
     }
 
 
+
+
+    //side drawer component
+
+    const [state, setState] = React.useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
+
+    const toggleDrawer = (anchor, open) => (event) => {
+        if (
+            event &&
+            event.type === 'keydown' &&
+            (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+            return;
+        }
+
+        setState({ ...state, [anchor]: open });
+    };
+
+    const list = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+
+        </Box>
+    );
+
     return (
         <div className="homepg">
-            <nav id="topnav">
-                <input id="searchbar" type="text" placeholder="SEARCH HERE" onChange={() => { search_peps() }} />
-                <h2 id="tnh2">PINKSTAGRAM</h2>
-                <div class="btngrp">
-                    <img id="tna1" src="https://static.thenounproject.com/png/77002-200.png" height="40" width="40" onClick={() => { homesw() }} />
-                    <img id="tna2" src="https://t3.ftcdn.net/jpg/02/43/54/26/360_F_243542639_ACGtPCq2ueqTSTkqEJ3PHRekC96uVoUW.jpg" height="40" width="40" onClick={() => { profsw() }} />
-                    <Button className="picsendbtn" variant="outlined" color="primary" id="post_show" onClick={() => { show_pstbar() }}>
-                        UPLOAD
-                    </Button>
+            <React.Fragment key={'left'}>
+                <nav id="topnav" className="w-full h-16 md:h-12 flex flex-row fixed z-10 justify-around items-center bg-white">
+                    <button className='block xl bg-yellow-400 md:hidden w-16 h-8 rounded-md' onClick={toggleDrawer('left', true)}>OPEN</button>
+                    <input className='hidden md:block border-2 h-6 border-pink-500 text-center border-solid rounded-none outline-none' id="searchbar" type="text" placeholder="SEARCH HERE" onChange={() => { search_peps() }} />
+                    <h2 id="tnh2" className=' text-2xl font-lobster2'>PINKSTAGRAM</h2>
+                    <div className="flex lg:w-1/6 h-16 flex flex-row justify-around items-center md:w-1/4">
+                        <img id="tna1" className='hidden md:block h-8 w-8 cursor-pointer' src="https://static.thenounproject.com/png/77002-200.png" onClick={() => { homesw() }} />
+                        <img id="tna2" className='hidden md:block h-8 w-8 cursor-pointer' src="https://t3.ftcdn.net/jpg/02/43/54/26/360_F_243542639_ACGtPCq2ueqTSTkqEJ3PHRekC96uVoUW.jpg" onClick={() => { profsw() }} />
+                        <Button variant="outlined" color="primary" className="h-8 w-24" id="post_show" onClick={() => { show_pstbar() }}>
+                            UPLOAD
+                        </Button>
+                    </div>
+                </nav>
+
+                <br />
+                <br />
+                <div className='h-full w-screen flex flex-col justify-center items-center'>
+                    {picini}
+                    {minini}
+                    {show_bar}
+                    {searchini}
+                    {profpicsini}
+                    {errmsg}
+                    {flistini}
                 </div>
-            </nav>
-            <br />
-            <br />
-            {picini}
-            {minini}
-            {show_bar}
-            {searchini}
-            {profpicsini}
-            {errmsg}
-            {flistini}
+                <Drawer
+                    anchor={'left'}
+                    open={state['left']}
+                    onClose={toggleDrawer('left', false)}
+                >
+                    {list('left')}
+                </Drawer>
+            </React.Fragment>
+
+
         </div>
 
     )
