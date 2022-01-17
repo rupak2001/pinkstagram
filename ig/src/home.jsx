@@ -312,10 +312,10 @@ var Home = (props) => {
                         var exdata = new Buffer(datas.img_store.data).toString('base64');
                         var picsrc = "data:image/jpeg;base64," + exdata;
                         return (
-                            <img src={picsrc} id="accimgs" />
+                            <img src={picsrc} id="accimgs" className='w-64 h-64' />
                         )
                     })
-                    profpicsup(<div id="profidcont">{pic_files}</div>)
+                    profpicsup(<div id="profidcont" className=' w-[95%] mt-4 flex-wrap flex flex-row justify-center items-start justify-evenly'>{pic_files}</div>)
                 }
 
             })
@@ -655,7 +655,7 @@ var Home = (props) => {
     return (
         <div className="homepg">
             <React.Fragment key={'left'}>
-                <nav id="topnav" className="w-full h-16 md:h-12 flex flex-row fixed z-10 justify-around items-center bg-white">
+                <nav id="topnav" className="w-full h-16 md:h-12 border-b-2 border-b-gray-200 flex flex-row fixed z-10 justify-around items-center bg-white">
                     <button className='block xl bg-yellow-400 md:hidden w-16 h-8 rounded-md' onClick={toggleDrawer('left', true)}>OPEN</button>
                     <input className='hidden md:block border-2 h-6 border-pink-500 text-center border-solid rounded-none outline-none' id="searchbar" type="text" placeholder="SEARCH HERE" onChange={() => { search_peps() }} />
                     <h2 id="tnh2" className=' text-2xl font-lobster2'>PINKSTAGRAM</h2>
