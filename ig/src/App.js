@@ -2,13 +2,14 @@ import Home from './home'
 import Login from './login'
 import Signup from './signup'
 import { useState } from 'react'
+import {useCookies} from 'react-cookie'
 
 function App() {
 
     //main hook for changing components between log-in page and sign-up page
 
     var [log, success] = useState(<Login login_func={() => { check_login() }} change_to_sign = {()=>{change_sign()}}/>)
-
+    var [cookies,setCookie] = useCookies(['user_inf']);
 
 
 
@@ -44,6 +45,7 @@ function App() {
                 success(<Login login_func={() => { check_login() }} errmsg = {"Sorry, your password was incorrect.Please double-check your password."} change_to_sign = {()=>{change_sign()}}/>)
             }
             else if (chk === 1) {
+                setCookie('email',email,{path:"/"})
                 success(<Home finename = {email} />)
             }
         });

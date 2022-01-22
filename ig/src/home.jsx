@@ -7,6 +7,7 @@ import Drawer from '@mui/material/Drawer';
 import Profile from './profile_pg';
 import Editpg from './edit_user_pg'
 import MinDisp from './mini_disp';
+import { useCookies } from 'react-cookie'
 
 
 var count = 0;
@@ -20,7 +21,7 @@ var picdata;
 var mincomspp;
 var hostData;
 
-var Home = (props) => {
+var Home = () => {
     var [show_bar, up_bar] = useState();
     var [picini, picshow] = useState();
     var [searchini, searchup] = useState();
@@ -28,6 +29,7 @@ var Home = (props) => {
     var [errmsg, errup] = useState();
     var [minini, minup] = useState();
     var [flistini, flistup] = useState();
+    var [cookies, setCookie] = useCookies(['user_inf'])
     var imageData = [];
     var userData = [];
     var p_c = 0;
@@ -39,7 +41,7 @@ var Home = (props) => {
     var show_pstbar = () => {
         ++count;
         if (count % 2 !== 0) {
-            up_bar(<Pic_up finname={props.finename} />)
+            up_bar(<Pic_up finname={cookies.email} />)
         }
         else {
             up_bar();
@@ -53,7 +55,7 @@ var Home = (props) => {
 
     var feed_feeder = async () => {
         var imgdata = []
-        await fetch("http://localhost:8000/feed_feeder/" + props.finename)
+        await fetch("http://localhost:8000/feed_feeder/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 imgdata = data;
@@ -64,7 +66,6 @@ var Home = (props) => {
             imageData.push(imgdata[i]);
         }
 
-
         for (var i = 0; i < imageData.length; i++) {
             await fetch('http://localhost:8000/exprofdata/' + imageData[i].email)
                 .then(res => res.json())
@@ -73,7 +74,7 @@ var Home = (props) => {
                 })
         }
 
-        await fetch("http://localhost:8000/exprofdata/" + props.finename)
+        await fetch("http://localhost:8000/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 hostData = data[0]
@@ -111,7 +112,7 @@ var Home = (props) => {
                 var likebutpic = datas.likes;
 
                 for (var k = 0; k < likebutpic.length; k++) {
-                    if (likebutpic[k].email === props.finename) {
+                    if (likebutpic[k].email === cookies.email) {
                         iscom = 1;
                         break;
                     }
@@ -154,8 +155,6 @@ var Home = (props) => {
 
         for (var j = 0; j < extpicdata.comments.length; j++) {
             var comdata = extpicdata.comments[j];
-
-
             await fetch("http://localhost:8000/exprofdata/" + comdata.email)
                 .then(nres => nres.json())
                 .then(ndata => {
@@ -193,11 +192,15 @@ var Home = (props) => {
         minup();
     }
 
+    var setSearchbarMargin = () => {
+
+    }
+
     var sendcommin = async (sid, picno) => {
         var inp = document.getElementById("mindispcominp").value;
 
         if (inp) {
-            var body = { email: props.finename, comment: inp, id: sid, username: huname }
+            var body = { email: cookies.email, comment: inp, id: sid, username: huname }
             fetch("http://localhost:8000/send_cmnt", {
                 method: "POST",
                 body: JSON.stringify(body),
@@ -245,7 +248,7 @@ var Home = (props) => {
 
 
     var like = (id, likebut) => {
-        var body = { name: huname, email: props.finename, id: id }
+        var body = { name: huname, email: cookies.email, id: id }
         var cntid = likebut.target.id
         var cnt = cntid.substr(6, cntid.length - 1)
         var act_no = Number(document.getElementById("totlikes" + cnt).innerHTML)
@@ -258,7 +261,7 @@ var Home = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                if (data.is_liked == 0) {
+                if (data.is_liked === 0) {
                     document.getElementById(likebut.target.id).src = "data:image/png;base64,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"
                     document.getElementById("totlikes" + cnt).innerHTML = act_no - 1
                 }
@@ -273,7 +276,7 @@ var Home = (props) => {
     var post_cmnt = (id) => {
         var message = comment
         if (message) {
-            var body = { email: props.finename, comment: message, id: id, username: huname }
+            var body = { email: cookies.email, comment: message, id: id, username: huname }
             fetch("http://localhost:8000/send_cmnt", {
                 method: "POST",
                 body: JSON.stringify(body),
@@ -312,7 +315,7 @@ var Home = (props) => {
                         var exdata = new Buffer(datas.img_store.data).toString('base64');
                         var picsrc = "data:image/jpeg;base64," + exdata;
                         return (
-                            <img src={picsrc} id="accimgs" className='w-64 h-64' />
+                            <img src={picsrc} id="accimgs" className='w-64 h-64 mt-4' />
                         )
                     })
                     profpicsup(<div id="profidcont" className=' w-[95%] mt-4 flex-wrap flex flex-row justify-center items-start justify-evenly'>{pic_files}</div>)
@@ -337,7 +340,7 @@ var Home = (props) => {
             setTimeout(() => { errup() }, 2000)
         }
         var nameobj = { name: newname };
-        fetch("http://localhost:8000/editname/" + props.finename, {
+        fetch("http://localhost:8000/editname/" + cookies.email, {
             method: "POST",
             body: JSON.stringify(nameobj),
             headers: { 'Content-Type': 'application/json' }
@@ -358,7 +361,7 @@ var Home = (props) => {
             setTimeout(() => { errup() }, 2000)
         }
         else {
-            await fetch("http://localhost:8000/editpass/" + props.finename, {
+            await fetch("http://localhost:8000/editpass/" + cookies.email, {
                 method: "POST",
                 body: JSON.stringify({ oldpass: oldpass, newpass: newpass }),
                 headers: { 'Content-Type': 'application/json' }
@@ -401,7 +404,7 @@ var Home = (props) => {
         }
         else {
             formdat.append('file', dp);
-            await fetch("http://localhost:8000/editpp/" + props.finename, {
+            await fetch("http://localhost:8000/editpp/" + cookies.email, {
                 method: "POST",
                 body: formdat,
             })
@@ -417,7 +420,7 @@ var Home = (props) => {
     //show editor page
     var showeditor = async () => {
         profpicsup()
-        await fetch("http://localhost:8000/exprofdata/" + props.finename)
+        await fetch("http://localhost:8000/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -484,7 +487,7 @@ var Home = (props) => {
                     var pimg = new Buffer(datas.profimg).toString('base64')
                     return (
                         <div id="foll_list" >
-                            <img className = "w-4 h-4 rounded-lg" src={"data:image/jpeg;base64," + pimg} />
+                            <img className="w-4 h-4 rounded-lg" src={"data:image/jpeg;base64," + pimg} />
                             <p>{datas.name}</p>
                         </div>
                     )
@@ -509,13 +512,13 @@ var Home = (props) => {
 
     //show profile with proper data
     var profsw = async () => {
-        await fetch("http://localhost:8000/exprofdata/" + props.finename)
+        await fetch("http://localhost:8000/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
                 var linkimg = "data:image/jpeg;base64," + actimg;
                 picshow(<Profile showfollowinglist={() => { showfollowinglist() }} showfollowerlist={() => { showfollowerlist() }} expics={profpicsini} edprof={() => { showeditor() }} name={data[0].name} postno={data[0].postCount} followerno={data[0].followerCount} followingno={data[0].followingCount} dp={linkimg} />)
-                accpicextractor(props.finename);
+                accpicextractor(cookies.email);
 
 
             })
@@ -535,12 +538,12 @@ var Home = (props) => {
 
     //show people in the search bar
     async function search_peps() {
-        await fetch('http://localhost:8000/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + props.finename)
+        await fetch('http://localhost:8000/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 if (data.length === 0) {
                     searchup(
-                        <div id="searchlstbx" className='w-80 h-80 bg-white border-2 border-pink-400/70 fixed top-0 left-0 mt-12'>
+                        <div id="searchlstbx" className='w-80 h-80 mx-[5.5%] bg-white border-2 border-pink-400/70 fixed top-0 left-0 mt-12'>
                             <br />
                             <p style={{ textAlign: "center" }}>no user found</p>
                         </div>)
@@ -550,13 +553,13 @@ var Home = (props) => {
                     var j = 0;
                     var userdat = data.map((users) => {
                         j += 1;
-                        if (users.email !== props.finename) {
+                        if (users.email !== cookies.email) {
                             if (users.isFollowed === 0) {
                                 return (
                                     <div className="w-full  h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly" id={users.email}>
                                         <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
                                         <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
-                                        <button className = "w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
+                                        <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
                                     </div>
                                 )
                             }
@@ -565,7 +568,7 @@ var Home = (props) => {
                                     <div id={users.email} className="w-full h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly">
                                         <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
                                         <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
-                                        <button className = "w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
+                                        <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
                                     </div>
                                 )
                             }
@@ -573,7 +576,7 @@ var Home = (props) => {
 
                     })
                     searchup(
-                        <div id="searchlstbx" className='w-80 h-80 bg-white border-2 border-pink-400/70 overflow-y-auto fixed top-0 left-0 mt-12'>
+                        <div id="searchlstbx" className='w-80 h-80 mx-[5.5%] bg-white border-2 border-pink-400/70 overflow-y-auto fixed top-0 left-0 mt-12'>
                             {userdat}
                         </div>)
                 }
@@ -602,7 +605,7 @@ var Home = (props) => {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
         console.log(peplist[sid - 1])
-        await fetch("http://localhost:8000/followmech/" + peplist[sid - 1].email + "/" + props.finename)
+        await fetch("http://localhost:8000/followmech/" + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("FOLLOWED!!"))
@@ -611,7 +614,7 @@ var Home = (props) => {
     async function unfollowmech(event) {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
-        await fetch("http://localhost:8000/unfollowmech/" + peplist[sid - 1].email + "/" + props.finename)
+        await fetch("http://localhost:8000/unfollowmech/" + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("UNFOLLOWED!!"))

@@ -24,7 +24,7 @@ var Editpg = (props) => {
                     <div className='flex flex-col md:flex-row  w-full justify-center items-center'>
                         <input className='mr-2 mb-4 pl-2 outline-none' id="oldpass" type="password" placeholder="enter existng password" />
                         <input className='mr-2 pl-2 mb-4 outline-none' id="newpass" type="password" placeholder="enter new password" />
-                        <button className='bg-white hover:bg-gray-100 text-indigo-700 w-16 rounded-lg' onClick={props.editpass}>submit</button>
+                        <button className='bg-white hover:bg-gray-100 mb-4 text-indigo-700 w-16 rounded-lg' onClick={props.editpass}>submit</button>
                     </div>
                 </div>
             </div>
