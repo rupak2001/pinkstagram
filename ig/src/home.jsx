@@ -7,6 +7,7 @@ import Drawer from '@mui/material/Drawer';
 import Profile from './profile_pg';
 import Editpg from './edit_user_pg'
 import MinDisp from './mini_disp';
+import HashLoader from "react-spinners/HashLoader";
 import { useCookies } from 'react-cookie'
 
 
@@ -20,7 +21,7 @@ var postcount;
 var picdata;
 var mincomspp;
 var hostData;
-
+var com_map_key = 0;
 var Home = () => {
     var [show_bar, up_bar] = useState();
     var [picini, picshow] = useState();
@@ -55,7 +56,7 @@ var Home = () => {
 
     var feed_feeder = async () => {
         var imgdata = []
-        await fetch("https://pinkstagram-server.herokuapp.com/feed_feeder/" + cookies.email)
+        await fetch("http://localhost:800/feed_feeder/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 imgdata = data;
@@ -67,14 +68,14 @@ var Home = () => {
         }
 
         for (var i = 0; i < imageData.length; i++) {
-            await fetch('https://pinkstagram-server.herokuapp.com/exprofdata/' + imageData[i].email)
+            await fetch('http://localhost:800/exprofdata/' + imageData[i].email)
                 .then(res => res.json())
                 .then(data => {
                     userData.push(data[0])
                 })
         }
 
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
+        await fetch("http://localhost:800/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 hostData = data[0]
@@ -138,53 +139,43 @@ var Home = () => {
 
 
     var op_minpg = async (fid) => {
+        minup(<div className='w-screen h-screen fixed pb-64 flex justify-center items-center'>
+            <HashLoader color='#FF1493' loading= 'true' size = "100"/>
+        </div>)
         var picid = fid.target.id;
         var picno = picid.substr(9, picid.length - 1)
         var extpicdata = imageData[picno - 1];
         var shpic = extpicdata.img_store;
         var b64pic = new Buffer(shpic.data).toString('base64');
         var piclink = "data:image/jpeg;base64," + b64pic;
+        var host_name = "";
 
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + extpicdata.email)
+        await fetch("http://localhost:800/exprofdata/" + extpicdata.email)
             .then(res => res.json())
             .then(data => {
                 b64pic = new Buffer(data[0].profimg).toString('base64')
-                minup(<MinDisp minsendbut={() => { sendcommin(extpicdata._id, picno) }} minpp={"data:image/jpeg;base64," + b64pic} minactpic={piclink} minname={data[0].name} exitmin={() => { exitmin() }} />)
-
+                host_name = data[0].name
             })
 
-        for (var j = 0; j < extpicdata.comments.length; j++) {
-            var comdata = extpicdata.comments[j];
-            await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + comdata.email)
+
+        var comments = await Promise.all(extpicdata.comments.map(async (eachcom) => {
+
+            await fetch("http://localhost:8000/exprofdata/" + eachcom.email)
                 .then(nres => nres.json())
                 .then(ndata => {
                     mincomspp = new Buffer(ndata[0].profimg).toString('base64')
                     mincomspp = "data:image/jpeg;base64," + mincomspp
                 })
+            return (
+                <div id="mincomdiv" key={com_map_key++}>
+                    <img id="mincomimg" src={mincomspp} key={com_map_key++} />
+                    <p id="mincomp1" key={com_map_key++}>{eachcom.username}</p>
+                    <p id="mincomp2" key={com_map_key++}>{eachcom.comment}</p>
+                </div>
+            )
+        }))
+        minup(<MinDisp minsendbut={() => { sendcommin(extpicdata._id, picno) }} comments={comments} minpp={"data:image/jpeg;base64," + b64pic} minactpic={piclink} minname={host_name} exitmin={() => { exitmin() }} />)
 
-            var mincomdiv = document.createElement('div');
-            mincomdiv.setAttribute('id', 'mincomdiv')
-            var mincomimg = document.createElement('img')
-            mincomimg.setAttribute('id', 'mincomimg')
-            mincomimg.setAttribute('src', mincomspp)
-
-            var mincomp1 = document.createElement('p')
-            mincomp1.setAttribute('id', 'mincomp1')
-            var mincomp1txt = document.createTextNode(comdata.username)
-            mincomp1.append(mincomp1txt)
-
-
-            var mincomp2 = document.createElement('p')
-            mincomp2.setAttribute('id', 'mincomp2')
-            var mincomp2txt = document.createTextNode(comdata.comment)
-            mincomp2.append(mincomp2txt)
-
-            mincomdiv.append(mincomimg)
-            mincomdiv.append(mincomp1)
-            mincomdiv.append(mincomp2)
-
-            document.getElementById("commentsmin").append(mincomdiv)
-        }
 
     }
 
@@ -192,16 +183,12 @@ var Home = () => {
         minup();
     }
 
-    var setSearchbarMargin = () => {
-
-    }
-
     var sendcommin = async (sid, picno) => {
         var inp = document.getElementById("mindispcominp").value;
 
         if (inp) {
             var body = { email: cookies.email, comment: inp, id: sid, username: huname }
-            fetch("https://pinkstagram-server.herokuapp.com/send_cmnt", {
+            fetch("http://localhost:800/send_cmnt", {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { 'Content-Type': 'application/json' }
@@ -254,7 +241,7 @@ var Home = () => {
         var act_no = Number(document.getElementById("totlikes" + cnt).innerHTML)
 
 
-        fetch("https://pinkstagram-server.herokuapp.com/like", {
+        fetch("http://localhost:800/like", {
             method: "POST",
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json' }
@@ -277,7 +264,7 @@ var Home = () => {
         var message = comment
         if (message) {
             var body = { email: cookies.email, comment: message, id: id, username: huname }
-            fetch("https://pinkstagram-server.herokuapp.com/send_cmnt", {
+            fetch("http://localhost:800/send_cmnt", {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
@@ -304,7 +291,7 @@ var Home = () => {
 
 
     var accpicextractor = async (usermail) => {
-        await fetch("https://pinkstagram-server.herokuapp.com/feed_pics/" + usermail)
+        await fetch("http://localhost:800/feed_pics/" + usermail)
             .then(res => res.json())
             .then(data => {
                 if (data.length < 1) {
@@ -340,7 +327,7 @@ var Home = () => {
             setTimeout(() => { errup() }, 2000)
         }
         var nameobj = { name: newname };
-        fetch("https://pinkstagram-server.herokuapp.com/editname/" + cookies.email, {
+        fetch("http://localhost:800/editname/" + cookies.email, {
             method: "POST",
             body: JSON.stringify(nameobj),
             headers: { 'Content-Type': 'application/json' }
@@ -361,7 +348,7 @@ var Home = () => {
             setTimeout(() => { errup() }, 2000)
         }
         else {
-            await fetch("https://pinkstagram-server.herokuapp.com/editpass/" + cookies.email, {
+            await fetch("http://localhost:800/editpass/" + cookies.email, {
                 method: "POST",
                 body: JSON.stringify({ oldpass: oldpass, newpass: newpass }),
                 headers: { 'Content-Type': 'application/json' }
@@ -404,7 +391,7 @@ var Home = () => {
         }
         else {
             formdat.append('file', dp);
-            await fetch("https://pinkstagram-server.herokuapp.com/editpp/" + cookies.email, {
+            await fetch("http://localhost:800/editpp/" + cookies.email, {
                 method: "POST",
                 body: formdat,
             })
@@ -420,7 +407,7 @@ var Home = () => {
     //show editor page
     var showeditor = async () => {
         profpicsup()
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
+        await fetch("http://localhost:800/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -438,7 +425,7 @@ var Home = () => {
             folle_userlist.push(folle_list[k].email)
         }
 
-        fetch("https://pinkstagram-server.herokuapp.com/fetchfollowdata", {
+        fetch("http://localhost:800/fetchfollowdata", {
             method: "POST",
             body: JSON.stringify({ email: folle_userlist }),
             headers: { 'Content-Type': 'application/json' }
@@ -476,7 +463,7 @@ var Home = () => {
             folle_userlist.push(folle_list[k].email)
         }
 
-        fetch("https://pinkstagram-server.herokuapp.com/fetchfollowdata", {
+        fetch("http://localhost:800/fetchfollowdata", {
             method: "POST",
             body: JSON.stringify({ email: folle_userlist }),
             headers: { 'Content-Type': 'application/json' }
@@ -512,7 +499,7 @@ var Home = () => {
 
     //show profile with proper data
     var profsw = async () => {
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
+        await fetch("http://localhost:800/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -538,7 +525,7 @@ var Home = () => {
 
     //show people in the search bar
     async function search_peps() {
-        await fetch('https://pinkstagram-server.herokuapp.com/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
+        await fetch('http://localhost:800/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 if (data.length === 0) {
@@ -586,7 +573,7 @@ var Home = () => {
 
     var show_oth_prof = (umail) => {
         searchup()
-        fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + umail.target.id)
+        fetch("http://localhost:800/exprofdata/" + umail.target.id)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -605,7 +592,7 @@ var Home = () => {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
         console.log(peplist[sid - 1])
-        await fetch("https://pinkstagram-server.herokuapp.com/followmech/" + peplist[sid - 1].email + "/" + cookies.email)
+        await fetch("http://localhost:800/followmech/" + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("FOLLOWED!!"))
@@ -614,7 +601,7 @@ var Home = () => {
     async function unfollowmech(event) {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
-        await fetch("https://pinkstagram-server.herokuapp.com/unfollowmech/" + peplist[sid - 1].email + "/" + cookies.email)
+        await fetch("http://localhost:800/unfollowmech/" + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("UNFOLLOWED!!"))
