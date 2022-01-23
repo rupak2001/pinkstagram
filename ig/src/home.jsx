@@ -7,6 +7,7 @@ import Drawer from '@mui/material/Drawer';
 import Profile from './profile_pg';
 import Editpg from './edit_user_pg'
 import MinDisp from './mini_disp';
+import HashLoader from "react-spinners/HashLoader";
 import { useCookies } from 'react-cookie'
 
 
@@ -20,7 +21,7 @@ var postcount;
 var picdata;
 var mincomspp;
 var hostData;
-
+var com_map_key = 0;
 var Home = () => {
     var [show_bar, up_bar] = useState();
     var [picini, picshow] = useState();
@@ -138,62 +139,50 @@ var Home = () => {
 
 
     var op_minpg = async (fid) => {
+        minup(<div className='w-screen h-screen fixed pb-64 flex justify-center items-center'>
+            <HashLoader color='#FF1493' loading= 'true' size = "100"/>
+        </div>)
         var picid = fid.target.id;
         var picno = picid.substr(9, picid.length - 1)
         var extpicdata = imageData[picno - 1];
         var shpic = extpicdata.img_store;
         var b64pic = new Buffer(shpic.data).toString('base64');
         var piclink = "data:image/jpeg;base64," + b64pic;
+        var host_name = "";
 
         await fetch("http://localhost:8000/exprofdata/" + extpicdata.email)
             .then(res => res.json())
             .then(data => {
                 b64pic = new Buffer(data[0].profimg).toString('base64')
-                minup(<MinDisp minsendbut={() => { sendcommin(extpicdata._id, picno) }} minpp={"data:image/jpeg;base64," + b64pic} minactpic={piclink} minname={data[0].name} exitmin={() => { exitmin() }} />)
-
+                host_name = data[0].name
             })
 
-        for (var j = 0; j < extpicdata.comments.length; j++) {
-            var comdata = extpicdata.comments[j];
-            await fetch("http://localhost:8000/exprofdata/" + comdata.email)
+
+        var comments = await Promise.all(extpicdata.comments.map(async (eachcom) => {
+
+            await fetch("http://localhost:8000/exprofdata/" + eachcom.email)
                 .then(nres => nres.json())
                 .then(ndata => {
                     mincomspp = new Buffer(ndata[0].profimg).toString('base64')
                     mincomspp = "data:image/jpeg;base64," + mincomspp
                 })
 
-            var mincomdiv = document.createElement('div');
-            mincomdiv.setAttribute('id', 'mincomdiv')
-            var mincomimg = document.createElement('img')
-            mincomimg.setAttribute('id', 'mincomimg')
-            mincomimg.setAttribute('src', mincomspp)
+            console.log(eachcom)
+            return (
+                <div id="mincomdiv" key={com_map_key++}>
+                    <img id="mincomimg" src={mincomspp} key={com_map_key++} />
+                    <p id="mincomp1" key={com_map_key++}>{eachcom.username}</p>
+                    <p id="mincomp2" key={com_map_key++}>{eachcom.comment}</p>
+                </div>
+            )
+        }))
+        minup(<MinDisp minsendbut={() => { sendcommin(extpicdata._id, picno) }} comments={comments} minpp={"data:image/jpeg;base64," + b64pic} minactpic={piclink} minname={host_name} exitmin={() => { exitmin() }} />)
 
-            var mincomp1 = document.createElement('p')
-            mincomp1.setAttribute('id', 'mincomp1')
-            var mincomp1txt = document.createTextNode(comdata.username)
-            mincomp1.append(mincomp1txt)
-
-
-            var mincomp2 = document.createElement('p')
-            mincomp2.setAttribute('id', 'mincomp2')
-            var mincomp2txt = document.createTextNode(comdata.comment)
-            mincomp2.append(mincomp2txt)
-
-            mincomdiv.append(mincomimg)
-            mincomdiv.append(mincomp1)
-            mincomdiv.append(mincomp2)
-
-            document.getElementById("commentsmin").append(mincomdiv)
-        }
 
     }
 
     var exitmin = () => {
         minup();
-    }
-
-    var setSearchbarMargin = () => {
-
     }
 
     var sendcommin = async (sid, picno) => {
