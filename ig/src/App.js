@@ -29,7 +29,7 @@ function App() {
         var password = document.getElementById('logip2').value;
         var epass = { email: email, password: password };
 
-        await fetch('http://localhost:8000/login_post', {
+        await fetch('https://pinkstagram-server.herokuapp.com/login_post', {
             method: 'POST',
             body: JSON.stringify(epass),
             headers: { 'Content-Type': 'application/json' },
@@ -60,7 +60,7 @@ function App() {
             password:document.getElementById('logip3').value
         }
 
-        fetch('http://localhost:8000/new_user_add',
+        fetch('https://pinkstagram-server.herokuapp.com/new_user_add',
         {
             method:"POST",
             body:JSON.stringify(user_data),

@@ -55,7 +55,7 @@ var Home = () => {
 
     var feed_feeder = async () => {
         var imgdata = []
-        await fetch("http://localhost:8000/feed_feeder/" + cookies.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/feed_feeder/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 imgdata = data;
@@ -67,14 +67,14 @@ var Home = () => {
         }
 
         for (var i = 0; i < imageData.length; i++) {
-            await fetch('http://localhost:8000/exprofdata/' + imageData[i].email)
+            await fetch('https://pinkstagram-server.herokuapp.com/exprofdata/' + imageData[i].email)
                 .then(res => res.json())
                 .then(data => {
                     userData.push(data[0])
                 })
         }
 
-        await fetch("http://localhost:8000/exprofdata/" + cookies.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 hostData = data[0]
@@ -145,7 +145,7 @@ var Home = () => {
         var b64pic = new Buffer(shpic.data).toString('base64');
         var piclink = "data:image/jpeg;base64," + b64pic;
 
-        await fetch("http://localhost:8000/exprofdata/" + extpicdata.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + extpicdata.email)
             .then(res => res.json())
             .then(data => {
                 b64pic = new Buffer(data[0].profimg).toString('base64')
@@ -155,7 +155,7 @@ var Home = () => {
 
         for (var j = 0; j < extpicdata.comments.length; j++) {
             var comdata = extpicdata.comments[j];
-            await fetch("http://localhost:8000/exprofdata/" + comdata.email)
+            await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + comdata.email)
                 .then(nres => nres.json())
                 .then(ndata => {
                     mincomspp = new Buffer(ndata[0].profimg).toString('base64')
@@ -201,7 +201,7 @@ var Home = () => {
 
         if (inp) {
             var body = { email: cookies.email, comment: inp, id: sid, username: huname }
-            fetch("http://localhost:8000/send_cmnt", {
+            fetch("https://pinkstagram-server.herokuapp.com/send_cmnt", {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { 'Content-Type': 'application/json' }
@@ -254,7 +254,7 @@ var Home = () => {
         var act_no = Number(document.getElementById("totlikes" + cnt).innerHTML)
 
 
-        fetch("http://localhost:8000/like", {
+        fetch("https://pinkstagram-server.herokuapp.com/like", {
             method: "POST",
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json' }
@@ -277,7 +277,7 @@ var Home = () => {
         var message = comment
         if (message) {
             var body = { email: cookies.email, comment: message, id: id, username: huname }
-            fetch("http://localhost:8000/send_cmnt", {
+            fetch("https://pinkstagram-server.herokuapp.com/send_cmnt", {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
@@ -304,7 +304,7 @@ var Home = () => {
 
 
     var accpicextractor = async (usermail) => {
-        await fetch("http://localhost:8000/feed_pics/" + usermail)
+        await fetch("https://pinkstagram-server.herokuapp.com/feed_pics/" + usermail)
             .then(res => res.json())
             .then(data => {
                 if (data.length < 1) {
@@ -340,7 +340,7 @@ var Home = () => {
             setTimeout(() => { errup() }, 2000)
         }
         var nameobj = { name: newname };
-        fetch("http://localhost:8000/editname/" + cookies.email, {
+        fetch("https://pinkstagram-server.herokuapp.com/editname/" + cookies.email, {
             method: "POST",
             body: JSON.stringify(nameobj),
             headers: { 'Content-Type': 'application/json' }
@@ -361,7 +361,7 @@ var Home = () => {
             setTimeout(() => { errup() }, 2000)
         }
         else {
-            await fetch("http://localhost:8000/editpass/" + cookies.email, {
+            await fetch("https://pinkstagram-server.herokuapp.com/editpass/" + cookies.email, {
                 method: "POST",
                 body: JSON.stringify({ oldpass: oldpass, newpass: newpass }),
                 headers: { 'Content-Type': 'application/json' }
@@ -404,7 +404,7 @@ var Home = () => {
         }
         else {
             formdat.append('file', dp);
-            await fetch("http://localhost:8000/editpp/" + cookies.email, {
+            await fetch("https://pinkstagram-server.herokuapp.com/editpp/" + cookies.email, {
                 method: "POST",
                 body: formdat,
             })
@@ -420,7 +420,7 @@ var Home = () => {
     //show editor page
     var showeditor = async () => {
         profpicsup()
-        await fetch("http://localhost:8000/exprofdata/" + cookies.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -438,7 +438,7 @@ var Home = () => {
             folle_userlist.push(folle_list[k].email)
         }
 
-        fetch("http://localhost:8000/fetchfollowdata", {
+        fetch("https://pinkstagram-server.herokuapp.com/fetchfollowdata", {
             method: "POST",
             body: JSON.stringify({ email: folle_userlist }),
             headers: { 'Content-Type': 'application/json' }
@@ -476,7 +476,7 @@ var Home = () => {
             folle_userlist.push(folle_list[k].email)
         }
 
-        fetch("http://localhost:8000/fetchfollowdata", {
+        fetch("https://pinkstagram-server.herokuapp.com/fetchfollowdata", {
             method: "POST",
             body: JSON.stringify({ email: folle_userlist }),
             headers: { 'Content-Type': 'application/json' }
@@ -512,7 +512,7 @@ var Home = () => {
 
     //show profile with proper data
     var profsw = async () => {
-        await fetch("http://localhost:8000/exprofdata/" + cookies.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -538,7 +538,7 @@ var Home = () => {
 
     //show people in the search bar
     async function search_peps() {
-        await fetch('http://localhost:8000/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
+        await fetch('https://pinkstagram-server.herokuapp.com/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 if (data.length === 0) {
@@ -586,7 +586,7 @@ var Home = () => {
 
     var show_oth_prof = (umail) => {
         searchup()
-        fetch("http://localhost:8000/exprofdata/" + umail.target.id)
+        fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + umail.target.id)
             .then(res => res.json())
             .then(data => {
                 var actimg = new Buffer(data[0].profimg).toString('base64')
@@ -605,7 +605,7 @@ var Home = () => {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
         console.log(peplist[sid - 1])
-        await fetch("http://localhost:8000/followmech/" + peplist[sid - 1].email + "/" + cookies.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/followmech/" + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("FOLLOWED!!"))
@@ -614,7 +614,7 @@ var Home = () => {
     async function unfollowmech(event) {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
-        await fetch("http://localhost:8000/unfollowmech/" + peplist[sid - 1].email + "/" + cookies.email)
+        await fetch("https://pinkstagram-server.herokuapp.com/unfollowmech/" + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("UNFOLLOWED!!"))

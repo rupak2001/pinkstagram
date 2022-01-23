@@ -39,7 +39,7 @@ var Pic_up = (props) => {
             }
             console.log(desc)
 
-            await fetch("http://localhost:8000/picup_test/" + email + "/" + desc, {
+            await fetch("https://pinkstagram-server.herokuapp.com/picup_test/" + email + "/" + desc, {
                 method: "POST",
                 body: fromdat
                 //headers : {"content-type" :"multipart/form-data"}
