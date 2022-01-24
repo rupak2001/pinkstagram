@@ -1,4 +1,7 @@
 import React from 'react'
+import comment_icon from './icons/comment_icon.svg'
+import heart_outlined from './icons/heart_outlined.svg'
+import heart_red from './icons/heart_red.svg'
 var P_dummy = (props) => {
     return (
         <div id="p_dummywh" className='w-screen sm:w-128  mt-4 md:mt-4 bg-white'>
@@ -9,7 +12,7 @@ var P_dummy = (props) => {
             <img src={props.act_img} alt="postimg" id="postimg" style = {{height:"580px", width:"100%", objectFit:"cover"}} ></img>
             <div id="inpbox1" className='h-10 flex flex-row items-center border-l-2 border-r-2 '>
                 <input className="ml-2 mr-2 h-7 w-7 cursor-pointer" type="image" onClick={props.like} alt="like" id={props.likeid} src={props.likebpic}></input>
-                <input className=" h-7 w-7 cursor-pointer" type="image" onClick={props.compg} alt="comment" id = {props.commentbutid} class="w-6 h-6" src="https://cpng.pikpng.com/pngl/s/44-445926_circular-speech-bubble-outline-comments-comment-icon-instagram.png"></input>
+                <input className=" h-8 w-8 cursor-pointer" type="image" onClick={props.compg} alt="comment" id = {props.commentbutid} class="w-6 h-6" src={comment_icon}></input>
             </div>
             <div className='border-l-2 border-r-2 pl-2 h-4' style={{ display: "flex", flexDirection: "row", height: "40px" }}>
                 <p id={props.totlikes} className='font-bold mr-2'>{props.countlikes}</p>

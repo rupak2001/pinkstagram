@@ -1,7 +1,7 @@
 import Home from './home'
 import Login from './login'
 import Signup from './signup'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 
 function App() {
@@ -31,8 +31,7 @@ function App() {
         await fetch('https://pinkstagram-server.herokuapp.com/login_post', {
             method: 'POST',
             body: JSON.stringify(epass),
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'same-origin'
+            headers: { 'Content-Type': 'application/json' }
         })
             .then(res => res.json())
             .then(data => {
@@ -59,7 +58,7 @@ function App() {
             password: document.getElementById('logip3').value
         }
 
-        fetch('http://localhost:8000/new_user_add',
+        fetch('https://pinkstagram-server.herokuapp.com/new_user_add',
             {
                 method: "POST",
                 body: JSON.stringify(user_data),

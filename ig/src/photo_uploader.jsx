@@ -9,14 +9,22 @@ var Pic_up = (props) => {
     var [file, setFile] = useState();
     var onChange = (event) => {
         setFile(event.target.files[0])
-
-        /*if (event.target.files[0]) {
+        /*let base64String = ""
+        if (event.target.files[0]) {
             const reader = new FileReader();
+
             reader.readAsDataURL(event.target.files[0])
             reader.onloadend = () => {
-                setpic(<img id="uploaded_pic" src={reader.result} />);
+                base64String = reader.result.replace("data:", "")
+                    .replace(/^.+,/, "");
+
+                // imageBase64Stringsep = base64String;
+                console.log(base64String);
+                base64String = "data:image/jpeg;base64,"+base64String
             }
-        }*/
+        }
+
+        setFile(base64String)*/
 
     }
 
@@ -58,7 +66,7 @@ var Pic_up = (props) => {
             <input id="descbox" className='h-10 w-full sm:w-1/3 rounded-none outline-none text-center border-2 border-solid border-pink-500' type="text" placeholder="enter description"></input>
             <div id="updiv" className='bg-white w-full h-16 md:h-12 md:w-1/2  flex flex-row justify-around items-center'>
                 <input type="file" className='w-1/2 text-sm h-1/2 outline-none cursor-pointer ' accept="image/*" name="file" onChange={onChange} />
-                <p id="email_extractor"  style={{ display: "none" }}>{props.finname}</p>
+                <p id="email_extractor" style={{ display: "none" }}>{props.finname}</p>
                 <Button
                     variant="contained"
                     size="medium"
