@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var schimg = mongoose.Schema({
     "email":{type:String, required:true},
     "timestamp":{type:Date,default:Date.now()},
-    "img_store":{data:Buffer,contentType:String},
+    "img_store":{type:String,required:true},
     "description":{type:String},
     "likes":{type:Array,default:[]},
     "comments":{type:Array,default:[]},

@@ -11,12 +11,12 @@ var app = express();
 var cors = require('cors');
 
 app.use(cors());
-app.use(express.json());
-app.use(bodyparser.urlencoded({ extended: true }))
+app.use(bodyparser.json({limit: '50mb'}));
+app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
 app.set("view engine", "ejs")
 
 
-var storage = multer.diskStorage({
+/*var storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './uploads');
     },
@@ -25,7 +25,7 @@ var storage = multer.diskStorage({
     }
 })
 
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage })*/
 
 
 //login mechanism
@@ -61,18 +61,14 @@ app.post('/new_user_add', async (req, res) => {
     }
 })
 
-app.post("/picup_test/:email/:description", upload.single('file'), async (req, res) => {
-    console.log(req.file)
-    res.json(req.file)
+app.post("/picup_test/:email/:description", async (req, res) => {
     var im_dat = {
         email: req.params.email,
-        img_store: { data: fs.readFileSync(__dirname + '/uploads/' + req.file.filename), contentType: 'image/*' },
+        img_store: req.body.imgFile,
         description: req.params.description
     }
     var ndbi = new dbi(im_dat);
     await dbi.insertMany([ndbi])
-      .then(fs.unlinkSync(__dirname + '/uploads/' + req.file.filename))
-
     var incdata = await profmod.find({ email: req.params.email }).select({ postCount: 1, _id: 0 })
     incdata = incdata[0].postCount + 1;
     await profmod.updateOne({ email: req.params.email }, { $set: { postCount: incdata } })
@@ -157,7 +153,6 @@ app.get('/followmech/:clemail/:hostemail', async (req, res) => {
     await profmod.updateOne({ email: req.params.hostemail }, { $set: { followingList: following } })
     await profmod.updateOne({ email: req.params.clemail }, { $set: { followerCount: fwr_count } })
     await profmod.updateOne({ email: req.params.hostemail }, { $set: { followingCount: fing_count } })
-    console.log("updated")
 })
 
 
@@ -193,7 +188,6 @@ app.get("/unfollowmech/:clemail/:hostemail", async (req, res) => {
 })
 
 app.post("/editname/:email", async (req, res) => {
-    console.log(req.body)
     await db.updateOne({ email: req.params.email }, { $set: { name: req.body.name } })
     await profmod.updateOne({ email: req.params.email }, { $set: { name: req.body.name } })
 })
@@ -210,11 +204,8 @@ app.post("/editpass/:email", async (req, res) => {
 })
 
 
-app.post("/editpp/:email", upload.single('file'), async (req, res) => {
-    res.json(req.file)
-
-    await profmod.updateOne({ email: req.params.email }, { $set: { profimg: fs.readFileSync(__dirname + "/uploads/" + req.file.filename) } })
-        .then(fs.unlinkSync(__dirname + "/uploads/" + req.file.filename))
+app.post("/editpp/:email", async (req, res) => {
+    await profmod.updateOne({ email: req.params.email }, { $set: { profimg:req.body.profimg} })
         .catch(err => console.log(err))
 
 })

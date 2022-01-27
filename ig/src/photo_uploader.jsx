@@ -8,8 +8,7 @@ var email = "";
 var Pic_up = (props) => {
     var [file, setFile] = useState();
     var onChange = (event) => {
-        setFile(event.target.files[0])
-        /*let base64String = ""
+        let base64String = ""
         if (event.target.files[0]) {
             const reader = new FileReader();
 
@@ -18,21 +17,18 @@ var Pic_up = (props) => {
                 base64String = reader.result.replace("data:", "")
                     .replace(/^.+,/, "");
 
-                // imageBase64Stringsep = base64String;
-                console.log(base64String);
                 base64String = "data:image/jpeg;base64,"+base64String
+                setFile(base64String)
             }
         }
-
-        setFile(base64String)*/
 
     }
 
     var pic_upload = async () => {
         email = document.getElementById('email_extractor').innerHTML;
-        var fromdat = new FormData();
+        // var fromdat = new FormData();
         if (file) {
-            fromdat.append('file', file);
+            // fromdat.append('file', file);
 
 
             /*for(var i = 0;i<file.length;i++){
@@ -49,11 +45,12 @@ var Pic_up = (props) => {
 
             await fetch("https://pinkstagram-server.herokuapp.com/picup_test/" + email + "/" + desc, {
                 method: "POST",
-                body: fromdat
-                //headers : {"content-type" :"multipart/form-data"}
+                body: JSON.stringify({imgFile:file}),
+                headers : {"Content-Type" :"application/json"}
             })
-                .catch(err => { console.log(err) })
-                .then(alert("photo uploaded successfully"))
+            .then(alert("photo uploaded successfully"))
+            .catch(err => { console.log(err) })
+            
         }
         else {
             alert('NO IMAGE/s SELECTED')

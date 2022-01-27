@@ -11,6 +11,7 @@ import HashLoader from "react-spinners/HashLoader";
 import { useCookies } from 'react-cookie'
 import { Typography } from '@material-ui/core';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import PersonSearchRoundedIcon from '@mui/icons-material/PersonSearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import PersonIcon from '@mui/icons-material/Person';
 import home_icon from './icons/home_icon.svg'
@@ -18,6 +19,7 @@ import user_icon from './icons/user_icon.svg'
 import heart_outlined from './icons/heart_outlined.svg'
 import heart_red from './icons/heart_red.svg'
 import './css/min_disp.css'
+import Search_box from './searchbox_mob';
 
 var count = 0;
 var i = 0;
@@ -38,6 +40,7 @@ var Home = () => {
     var [errmsg, errup] = useState();
     var [minini, minup] = useState();
     var [flistini, flistup] = useState();
+    var [search_mob_ini, search_mob_up] = useState();
     var [cookies, setCookie, removeCookie] = useCookies(['user_inf'])
     var imageData = [];
     var userData = [];
@@ -64,6 +67,7 @@ var Home = () => {
 
     var feed_feeder = async () => {
         var imgdata = []
+        search_mob_up()
         await fetch("https://pinkstagram-server.herokuapp.com/feed_feeder/" + cookies.email)
             .then(res => res.json())
             .then(data => {
@@ -89,7 +93,7 @@ var Home = () => {
                 hostData = data[0]
             })
 
-        hpp = "data:image/jpeg;base64," + new Buffer(hostData.profimg).toString('base64')
+        hpp = hostData.profimg
         huname = hostData.name;
 
 
@@ -102,9 +106,9 @@ var Home = () => {
             var feedpics = imageData.map((datas) => {
                 p_c += 1;
 
-                var imgdata = new Buffer(datas.img_store.data).toString("base64")
+                var imgdata = datas.img_store
                 var uname = userData[p_c - 1].name;
-                var pp = "data:image/jpeg;base64," + new Buffer(userData[p_c - 1].profimg).toString('base64')
+                var pp = userData[p_c - 1].profimg;
 
                 var comdiv = datas.comments
                 var othuname;
@@ -136,7 +140,7 @@ var Home = () => {
 
                 }
                 return (
-                    <P_dummy likebpic={likebutsrc} commentbutid={"commentno" + p_c} compg={(fid) => { op_minpg(fid) }} txtuname={othuname} txtcmnt={othcomm} totcomms={"totcomms" + p_c} countcomms={datas.comment_count} totlikes={"totlikes" + p_c} countlikes={datas.like_count} likeid={"likeid" + p_c} countcm={p_c} commid={"commid" + p_c} commnt_val={fetch_comment} post_cmnt={() => { post_cmnt(datas._id) }} like={(nid) => { like(datas._id, nid) }} dp={pp} desc_uname={uname} uname={uname} act_img={"data:image/jpeg;base64," + imgdata} desc={datas.description} />
+                    <P_dummy likebpic={likebutsrc} commentbutid={"commentno" + p_c} compg={(fid) => { op_minpg(fid) }} txtuname={othuname} txtcmnt={othcomm} totcomms={"totcomms" + p_c} countcomms={datas.comment_count} totlikes={"totlikes" + p_c} countlikes={datas.like_count} likeid={"likeid" + p_c} countcm={p_c} commid={"commid" + p_c} commnt_val={fetch_comment} post_cmnt={() => { post_cmnt(datas._id) }} like={(nid) => { like(datas._id, nid) }} dp={pp} desc_uname={uname} uname={uname} act_img={imgdata} desc={datas.description} />
                 )
             })
 
@@ -153,15 +157,14 @@ var Home = () => {
         var picid = fid.target.id;
         var picno = picid.substr(9, picid.length - 1)
         var extpicdata = imageData[picno - 1];
-        var shpic = extpicdata.img_store;
-        var b64pic = new Buffer(shpic.data).toString('base64');
-        var piclink = "data:image/jpeg;base64," + b64pic;
+        var piclink = extpicdata.img_store;
+        var b64pic;
         var host_name = "";
 
         await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + extpicdata.email)
             .then(res => res.json())
             .then(data => {
-                b64pic = new Buffer(data[0].profimg).toString('base64')
+                b64pic = data[0].profimg
                 host_name = data[0].name
             })
 
@@ -171,8 +174,7 @@ var Home = () => {
             await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + eachcom.email)
                 .then(nres => nres.json())
                 .then(ndata => {
-                    mincomspp = new Buffer(ndata[0].profimg).toString('base64')
-                    mincomspp = "data:image/jpeg;base64," + mincomspp
+                    mincomspp = ndata[0].profimg
                 })
             return (
                 <div id="mincomdiv" key={com_map_key++}>
@@ -182,7 +184,7 @@ var Home = () => {
                 </div>
             )
         }))
-        minup(<MinDisp minsendbut={() => { sendcommin(extpicdata._id, picno) }} comments={comments} minpp={"data:image/jpeg;base64," + b64pic} minactpic={piclink} minname={host_name} exitmin={() => { exitmin() }} />)
+        minup(<MinDisp minsendbut={() => { sendcommin(extpicdata._id, picno) }} comments={comments} minpp={b64pic} minactpic={piclink} minname={host_name} exitmin={() => { exitmin() }} />)
 
 
     }
@@ -310,8 +312,7 @@ var Home = () => {
                 }
                 else {
                     var pic_files = data.map((datas) => {
-                        var exdata = new Buffer(datas.img_store.data).toString('base64');
-                        var picsrc = "data:image/jpeg;base64," + exdata;
+                        var picsrc = datas.img_store
                         return (
                             <img src={picsrc} id="accimgs" className=' w-32 h-32 md:w-64 md:h-64 mt-4' />
                         )
@@ -334,21 +335,25 @@ var Home = () => {
 
     var editname = () => {
         var newname = document.getElementById("nmchange").value;
-        if (newname.length === 0) {
-            errup(<p id="errmsg">plz fill the slot/s</p>)
+
+        if (newname.length !== 0) {
+            var nameobj = { name: newname };
+            fetch("https://pinkstagram-server.herokuapp.com/editname/" + cookies.email, {
+                method: "POST",
+                body: JSON.stringify(nameobj),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(document.getElementById("nmchange").value = null)
+            errup(<p id="errmsg" style={{ color: "blue", fontSize: "16px", marginTop: "10px" }}>Username Updated</p>)
+            setTimeout(() => {
+                errup()
+            }, 1000);
+        }
+        else {
+            errup(<p id="errmsg" style={{ color: "red", fontSize: "16px", marginTop: "10px" }}>plz fill the slot/s</p>)
             setTimeout(() => { errup() }, 2000)
         }
-        var nameobj = { name: newname };
-        fetch("https://pinkstagram-server.herokuapp.com/editname/" + cookies.email, {
-            method: "POST",
-            body: JSON.stringify(nameobj),
-            headers: { 'Content-Type': 'application/json' }
-        })
-            .then(document.getElementById("nmchange").value = null)
-        errup(<p id="errmsg">Username Updated</p>)
-        setTimeout(() => {
-            errup()
-        }, 1000);
+
     }
 
     var editpass = async () => {
@@ -356,7 +361,7 @@ var Home = () => {
         var newpass = document.getElementById("newpass").value;
 
         if (oldpass.length === 0 || newpass.length === 0) {
-            errup(<p id="errmsg">plz fill the solt/s first</p>)
+            errup(<p id="errmsg" style={{ color: "red", fontSize: "16px", marginTop: "10px" }}>plz fill the solt/s first</p>)
             setTimeout(() => { errup() }, 2000)
         }
         else {
@@ -368,14 +373,14 @@ var Home = () => {
                 .then(res => res.json())
                 .then(data => {
                     if (data.is_changed === 0) {
-                        errup(<p id="errmsg">existing password Wrong!</p>)
+                        errup(<p id="errmsg" style={{ color: "red", fontSize: "16px", marginTop: "10px" }}>existing password Wrong!</p>)
                         document.getElementById("oldpass").value = null;
                         document.getElementById("newpass").value = null;
                         setTimeout(() => { errup() }, 2000)
 
                     }
                     else {
-                        errup(<p id="errmsg">Password Updated!!</p>)
+                        errup(<p id="errmsg" style={{ color: "blue", fontSize: "16px", marginTop: "10px" }}>Password Updated!!</p>)
                         document.getElementById("oldpass").value = null;
                         document.getElementById("newpass").value = null;
                         setTimeout(() => { errup() }, 2000)
@@ -386,29 +391,39 @@ var Home = () => {
     var cngpp = (events) => {
         if (events) {
             dp = events.target.files[0];
-            var filereader = new FileReader();
-            filereader.readAsDataURL(events.target.files[0])
+            let base64String = ""
+            if (dp) {
+                const reader = new FileReader();
+                reader.readAsDataURL(dp)
+                reader.onloadend = () => {
+                    base64String = reader.result.replace("data:", "")
+                        .replace(/^.+,/, "");
 
-            filereader.onloadend = () => {
-                picshow(<Editpg editpp={() => { editpp() }} editname={() => { editname() }} editpass={() => { editpass() }} cngpp={cngpp} pp={filereader.result} />)
+                    base64String = "data:image/jpeg;base64," + base64String
+                    picshow(<Editpg editpp={() => { editpp() }} editname={() => { editname() }} editpass={() => { editpass() }} cngpp={cngpp} pp={base64String} />)
+                    dp = base64String
+                }
             }
 
+
+
         }
+
     }
 
     var editpp = async () => {
-        var formdat = new FormData();
         if (!dp) {
             alert("NO image/s selected");
         }
         else {
-            formdat.append('file', dp);
+            console.log(dp)
             await fetch("https://pinkstagram-server.herokuapp.com/editpp/" + cookies.email, {
                 method: "POST",
-                body: formdat,
+                body: JSON.stringify({ profimg: dp }),
+                headers: { 'Content-Type': 'application/json' }
             })
             dp = null
-            errup(<p id="errmsg">Profile Picture Updated!!</p>)
+            errup(<p id="errmsg" style={{ color: "blue", fontSize: "16px", marginTop: "10px" }}>Profile Picture Updated!!</p>)
             setTimeout(() => {
                 errup()
             }, 1000);
@@ -422,8 +437,7 @@ var Home = () => {
         await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
-                var actimg = new Buffer(data[0].profimg).toString('base64')
-                var linkimg = "data:image/jpeg;base64," + actimg;
+                var linkimg = data[0].profimg
                 picshow(<Editpg editpp={() => { editpp() }} editname={() => { editname() }} editpass={() => { editpass() }} pp={linkimg} cngpp={cngpp} />)
 
             })
@@ -445,10 +459,10 @@ var Home = () => {
             .then(res => res.json())
             .then(data => {
                 var info = data.map((datas) => {
-                    var pimg = new Buffer(datas.profimg).toString('base64')
+                    var pimg = datas.profimg
                     return (
                         <div id="foll_list">
-                            <img src={"data:image/jpeg;base64," + pimg} />
+                            <img src={pimg} />
                             <p>{datas.name}</p>
                         </div>
                     )
@@ -483,10 +497,10 @@ var Home = () => {
             .then(res => res.json())
             .then(data => {
                 var info = data.map((datas) => {
-                    var pimg = new Buffer(datas.profimg).toString('base64')
+                    var pimg = datas.profimg
                     return (
                         <div id="foll_list" >
-                            <img className="w-4 h-4 rounded-lg" src={"data:image/jpeg;base64," + pimg} />
+                            <img className="w-4 h-4 rounded-lg" src={pimg} />
                             <p>{datas.name}</p>
                         </div>
                     )
@@ -512,11 +526,11 @@ var Home = () => {
     //show profile with proper data 
     var profsw = async () => {
         minup()
+        search_mob_up()
         await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
             .then(res => res.json())
             .then(data => {
-                var actimg = new Buffer(data[0].profimg).toString('base64')
-                var linkimg = "data:image/jpeg;base64," + actimg;
+                var linkimg = data[0].profimg
                 picshow(<Profile showfollowinglist={() => { showfollowinglist() }} showfollowerlist={() => { showfollowerlist() }} expics={profpicsini} edprof={() => { showeditor() }} name={data[0].name} postno={data[0].postCount} followerno={data[0].followerCount} followingno={data[0].followingCount} dp={linkimg} />)
                 accpicextractor(cookies.email);
 
@@ -557,7 +571,7 @@ var Home = () => {
                             if (users.isFollowed === 0) {
                                 return (
                                     <div className="w-full  h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly" id={users.email}>
-                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
+                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={users.profimg} alt="userpp" />
                                         <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
                                         <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
                                     </div>
@@ -566,7 +580,7 @@ var Home = () => {
                             else {
                                 return (
                                     <div id={users.email} className="w-full h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly">
-                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={"data:image/jpeg;base64," + new Buffer(users.profimg).toString('base64')} alt="userpp" />
+                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={users.profimg} alt="userpp" />
                                         <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
                                         <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
                                     </div>
@@ -582,15 +596,66 @@ var Home = () => {
                 }
             })
             .catch(searchup())
+
+
+    }
+
+    async function search_peps_mob() {
+        await fetch('https://pinkstagram-server.herokuapp.com/search_people/' + document.getElementById('mob_search_bar').value.toLowerCase() + "/" + cookies.email)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length === 0) {
+                    search_mob_up(
+                        <p style={{ textAlign: "center", marginTop: "12px", color: "red", fontSize: "large" }}>no user found</p>
+                    )
+                }
+                else {
+                    peplist = data;
+                    var j = 0;
+                    var userdat = data.map((users) => {
+                        j += 1;
+                        if (users.email !== cookies.email) {
+                            if (users.isFollowed === 0) {
+                                return (
+                                    <div className="w-full  h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly" id={users.email}>
+                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={users.profimg} alt="userpp" />
+                                        <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
+                                        <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
+                                    </div>
+                                )
+                            }
+                            else {
+                                return (
+                                    <div id={users.email} className="w-full h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly">
+                                        <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={users.profimg} alt="userpp" />
+                                        <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
+                                        <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
+                                    </div>
+                                )
+                            }
+                        }
+
+                    })
+                    search_mob_up(
+                        <div className='w-full h-full overflow-y-auto flex flex-col justify-center items-start mt-2'>
+                            {userdat}
+                        </div>)
+                }
+            })
+            .catch(search_mob_up())
+    }
+
+    var show_mob_searchbar = () => {
+        picshow(<Search_box search_mob_inp={search_peps_mob} people={search_mob_ini} />)
     }
 
     var show_oth_prof = (umail) => {
         searchup()
+        search_mob_up()
         fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + umail.target.id)
             .then(res => res.json())
             .then(data => {
-                var actimg = new Buffer(data[0].profimg).toString('base64')
-                var linkimg = "data:image/jpeg;base64," + actimg;
+                var linkimg = data[0].profimg
                 picshow(<Profile expics={profpicsini} name={data[0].name} postno={data[0].postCount} followerno={data[0].followerCount} followingno={data[0].followingCount} dp={linkimg} />)
                 accpicextractor(umail.target.id);
                 document.getElementById('searchbar').value = null;
@@ -661,8 +726,10 @@ var Home = () => {
                 <Typography variant="h5" color="primary">Menu</Typography>
             </div>
             <Button className="w-full h-12" style={{ color: "#4BB543", marginTop: "1rem" }} color="secondary" variant="outlined" startIcon={<HomeRoundedIcon />} onClick={() => { homesw() }}>Home</Button>
+            <Button className="w-full h-12" style={{ marginTop: "1rem" }} color="primary" variant="outlined" startIcon={<PersonSearchRoundedIcon />} onClick={() => { show_mob_searchbar() }} >Search People</Button>
             <Button className="w-full h-12" style={{ marginTop: "1rem" }} color="secondary" variant="outlined" startIcon={<PersonIcon />} onClick={() => { profsw() }}>User</Button>
             <Button className="w-full h-12" style={{ color: "red", marginTop: "1rem" }} color="secondary" variant="outlined" startIcon={<ExitToAppRoundedIcon />} onClick={() => { logout() }} >Logout</Button>
+
         </Box>
     );
 
@@ -693,6 +760,7 @@ var Home = () => {
                     {minini}
                     {show_bar}
                     {searchini}
+                    {search_mob_ini}
                     {profpicsini}
                     {errmsg}
                     {flistini}

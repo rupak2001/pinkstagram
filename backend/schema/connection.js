@@ -33,7 +33,7 @@ module.exports = send_data;*/
 
 var mongoose = require('mongoose');
 require('dotenv').config();
-mongoose.connect('mongodb+srv://rupak:'+process.env.password+'@pinkstagram-db.2svpk.mongodb.net/pinkstagram?retryWrites=true&w=majority',{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true})
+mongoose.connect('mongodb+srv://rupak:'+process.env.password+'@pinkstagram-db.2svpk.mongodb.net/pinkstagram?retryWrites=true&w=majority'/*"mongodb://127.0.0.1:27017/ig_data"*/,{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true})
 .then(()=>{
     console.log("db connected");
 })
