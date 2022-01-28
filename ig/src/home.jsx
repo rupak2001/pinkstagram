@@ -461,22 +461,25 @@ var Home = () => {
                 var info = data.map((datas) => {
                     var pimg = datas.profimg
                     return (
-                        <div id="foll_list">
-                            <img src={pimg} />
+                        <div id="foll_list" className='flex flex-row mt-2 border-t-2 border-b-2 border-green-300 justify-center items-center' >
+                            <img className="w-8 h-8 rounded-full" src={pimg} />
                             <p>{datas.name}</p>
                         </div>
                     )
                 })
 
-                flistup(<div id="foll_box">
-                    <div id="infoll_box">
-                        <p>Followers</p>
-                        <input type="image" src="https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }} />
+                flistup(<div id="foll_box" className='w-screen h-screen fixed flex flex-row justify-center items-center'>
+                <div className='border-2 border-pink-400 w-full md:w-96 h-128 mt-[12rem] md:mt-16 bg-white flex flex-col'>
+                    <div id="infoll_box" className='w-full h-12 border-b-2 border-gray-300/80  flex flex-row justify-end items-center'>
+                        <p className = "text-lg underline">Followers</p>
+                        <input type="image" className='w-10 h-10 ml-[6.5rem]' src="https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }} />
                     </div>
-                    <div id="ifoll_box_msgs">
+                    <div id="ifoll_box_msgs" className='w-full h-full overflow-y-auto'>
                         {info}
                     </div>
-                </div>)
+                </div>
+
+            </div>)
             })
 
     }
@@ -499,21 +502,24 @@ var Home = () => {
                 var info = data.map((datas) => {
                     var pimg = datas.profimg
                     return (
-                        <div id="foll_list" >
-                            <img className="w-4 h-4 rounded-lg" src={pimg} />
+                        <div id="foll_list" className='flex flex-row mt-2 border-t-2 border-b-2 border-green-300 justify-center items-center' >
+                            <img className="w-8 h-8 rounded-full" src={pimg} />
                             <p>{datas.name}</p>
                         </div>
                     )
                 })
 
-                flistup(<div id="foll_box">
-                    <div id="infoll_box" className='bg-green-400'>
-                        <p>Following</p>
-                        <input type="image" src="https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }} />
+                flistup(<div id="foll_box" className='w-screen h-screen fixed flex flex-row justify-center items-center'>
+                    <div className='border-2 border-pink-400 w-full md:w-96 h-128 mt-[12rem] md:mt-16 bg-white flex flex-col'>
+                        <div id="infoll_box" className='w-full h-12 border-b-2 border-gray-300/80  flex flex-row justify-end items-center'>
+                            <p className = "text-lg underline">Following</p>
+                            <input type="image" className='w-10 h-10 ml-[6.5rem]' src="https://cdn.iconscout.com/icon/free/png-256/close-1912235-1617704.png" onClick={() => { flistup() }} />
+                        </div>
+                        <div id="ifoll_box_msgs" className='w-full h-full overflow-y-auto'>
+                            {info}
+                        </div>
                     </div>
-                    <div id="ifoll_box_msgs">
-                        {info}
-                    </div>
+
                 </div>)
             })
     }
