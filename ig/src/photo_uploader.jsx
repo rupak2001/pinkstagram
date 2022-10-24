@@ -2,6 +2,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useState } from 'react'
+import serverURL from './utils/url';
 
 var email = "";
 
@@ -43,7 +44,7 @@ var Pic_up = (props) => {
             }
             console.log(desc)
 
-            await fetch("https://pinkstagram-server.herokuapp.com/picup_test/" + email + "/" + desc, {
+            await fetch(`${serverURL }/picup_test/${email}/${desc}`, {
                 method: "POST",
                 body: JSON.stringify({imgFile:file}),
                 headers : {"Content-Type" :"application/json"}

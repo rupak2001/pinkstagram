@@ -20,6 +20,7 @@ import heart_outlined from './icons/heart_outlined.svg'
 import heart_red from './icons/heart_red.svg'
 import './css/min_disp.css'
 import Search_box from './searchbox_mob';
+import serverURL from './utils/url';
 
 var count = 0;
 var i = 0;
@@ -68,7 +69,7 @@ var Home = () => {
     var feed_feeder = async () => {
         var imgdata = []
         search_mob_up()
-        await fetch("https://pinkstagram-server.herokuapp.com/feed_feeder/" + cookies.email)
+        await fetch(`${serverURL}/feed_feeder/${cookies.email}`)
             .then(res => res.json())
             .then(data => {
                 imgdata = data;
@@ -80,14 +81,14 @@ var Home = () => {
         }
 
         for (var i = 0; i < imageData.length; i++) {
-            await fetch('https://pinkstagram-server.herokuapp.com/exprofdata/' + imageData[i].email)
+            await fetch(`${serverURL}/exprofdata/${imageData[i].email}`)
                 .then(res => res.json())
                 .then(data => {
                     userData.push(data[0])
                 })
         }
 
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
+        await fetch(`${serverURL}/exprofdata/${cookies.email}`)
             .then(res => res.json())
             .then(data => {
                 hostData = data[0]
@@ -161,7 +162,7 @@ var Home = () => {
         var b64pic;
         var host_name = "";
 
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + extpicdata.email)
+        await fetch(`${serverURL}/exprofdata/${extpicdata.email}`)
             .then(res => res.json())
             .then(data => {
                 b64pic = data[0].profimg
@@ -171,7 +172,7 @@ var Home = () => {
 
         var comments = await Promise.all(extpicdata.comments.map(async (eachcom) => {
 
-            await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + eachcom.email)
+            await fetch(`${serverURL}/exprofdata/${eachcom.email}`)
                 .then(nres => nres.json())
                 .then(ndata => {
                     mincomspp = ndata[0].profimg
@@ -198,7 +199,7 @@ var Home = () => {
 
         if (inp) {
             var body = { email: cookies.email, comment: inp, id: sid, username: huname }
-            fetch("https://pinkstagram-server.herokuapp.com/send_cmnt", {
+            fetch(`${serverURL}/send_cmnt`, {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { 'Content-Type': 'application/json' }
@@ -251,7 +252,7 @@ var Home = () => {
         var act_no = Number(document.getElementById("totlikes" + cnt).innerHTML)
 
 
-        fetch("https://pinkstagram-server.herokuapp.com/like", {
+        fetch(`${serverURL}/like`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json' }
@@ -274,7 +275,7 @@ var Home = () => {
         var message = comment
         if (message) {
             var body = { email: cookies.email, comment: message, id: id, username: huname }
-            fetch("https://pinkstagram-server.herokuapp.com/send_cmnt", {
+            fetch(`${serverURL}/send_cmnt`, {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
@@ -304,7 +305,7 @@ var Home = () => {
         profpicsup(<div className='w-[95%] mt-8 flex-wrap flex flex-row justify-center items-center justify-evenly'>
             <HashLoader color='#FF1493' loading='true' size="100px" />
         </div>)
-        await fetch("https://pinkstagram-server.herokuapp.com/feed_pics/" + usermail)
+        await fetch(`${serverURL}/feed_pics/${usermail}`)
             .then(res => res.json())
             .then(data => {
                 if (data.length < 1) {
@@ -338,7 +339,7 @@ var Home = () => {
 
         if (newname.length !== 0) {
             var nameobj = { name: newname };
-            fetch("https://pinkstagram-server.herokuapp.com/editname/" + cookies.email, {
+            fetch(`${serverURL}/editname/${cookies.email}`, {
                 method: "POST",
                 body: JSON.stringify(nameobj),
                 headers: { 'Content-Type': 'application/json' }
@@ -365,7 +366,7 @@ var Home = () => {
             setTimeout(() => { errup() }, 2000)
         }
         else {
-            await fetch("https://pinkstagram-server.herokuapp.com/editpass/" + cookies.email, {
+            await fetch(`${serverURL}/editpass${cookies.email}`, {
                 method: "POST",
                 body: JSON.stringify({ oldpass: oldpass, newpass: newpass }),
                 headers: { 'Content-Type': 'application/json' }
@@ -417,7 +418,7 @@ var Home = () => {
         }
         else {
             console.log(dp)
-            await fetch("https://pinkstagram-server.herokuapp.com/editpp/" + cookies.email, {
+            await fetch(`${serverURL}/editpp/${cookies.email}`, {
                 method: "POST",
                 body: JSON.stringify({ profimg: dp }),
                 headers: { 'Content-Type': 'application/json' }
@@ -434,7 +435,7 @@ var Home = () => {
     //show editor page
     var showeditor = async () => {
         profpicsup()
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
+        await fetch(`${serverURL}/exprofdata/${cookies.email}`)
             .then(res => res.json())
             .then(data => {
                 var linkimg = data[0].profimg
@@ -451,7 +452,7 @@ var Home = () => {
             folle_userlist.push(folle_list[k].email)
         }
 
-        fetch("https://pinkstagram-server.herokuapp.com/fetchfollowdata", {
+        fetch(`${serverURL}/fetchfollowdata`, {
             method: "POST",
             body: JSON.stringify({ email: folle_userlist }),
             headers: { 'Content-Type': 'application/json' }
@@ -492,7 +493,7 @@ var Home = () => {
             folle_userlist.push(folle_list[k].email)
         }
 
-        fetch("https://pinkstagram-server.herokuapp.com/fetchfollowdata", {
+        fetch(`${serverURL}/fetchfollowdata`, {
             method: "POST",
             body: JSON.stringify({ email: folle_userlist }),
             headers: { 'Content-Type': 'application/json' }
@@ -533,7 +534,7 @@ var Home = () => {
     var profsw = async () => {
         minup()
         search_mob_up()
-        await fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + cookies.email)
+        await fetch(`${serverURL}/exprofdata/${cookies.email}`)
             .then(res => res.json())
             .then(data => {
                 var linkimg = data[0].profimg
@@ -558,7 +559,7 @@ var Home = () => {
 
     //show people in the search bar
     async function search_peps() {
-        await fetch('https://pinkstagram-server.herokuapp.com/search_people/' + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
+        await fetch(`${serverURL}/search_people/` + document.getElementById('searchbar').value.toLowerCase() + "/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 if (data.length === 0) {
@@ -607,7 +608,7 @@ var Home = () => {
     }
 
     async function search_peps_mob() {
-        await fetch('https://pinkstagram-server.herokuapp.com/search_people/' + document.getElementById('mob_search_bar').value.toLowerCase() + "/" + cookies.email)
+        await fetch(`${serverURL}/search_people/` + document.getElementById('mob_search_bar').value.toLowerCase() + "/" + cookies.email)
             .then(res => res.json())
             .then(data => {
                 if (data.length === 0) {
@@ -658,7 +659,7 @@ var Home = () => {
     var show_oth_prof = (umail) => {
         searchup()
         search_mob_up()
-        fetch("https://pinkstagram-server.herokuapp.com/exprofdata/" + umail.target.id)
+        fetch(`${serverURL}/exprofdata/${umail.target.id}`)
             .then(res => res.json())
             .then(data => {
                 var linkimg = data[0].profimg
@@ -676,7 +677,7 @@ var Home = () => {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
         console.log(peplist[sid - 1])
-        await fetch("https://pinkstagram-server.herokuapp.com/followmech/" + peplist[sid - 1].email + "/" + cookies.email)
+        await fetch(`${serverURL}/followmech/` + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("FOLLOWED!!"))
@@ -685,7 +686,7 @@ var Home = () => {
     async function unfollowmech(event) {
         var sid = event.target.id
         var sid = Number(sid.substr(10, sid.length - 1))
-        await fetch("https://pinkstagram-server.herokuapp.com/unfollowmech/" + peplist[sid - 1].email + "/" + cookies.email)
+        await fetch(`${serverURL}/unfollowmech/` + peplist[sid - 1].email + "/" + cookies.email)
             .then(searchup())
             .then(document.getElementById("searchbar").value = null)
             .then(alert("UNFOLLOWED!!"))
