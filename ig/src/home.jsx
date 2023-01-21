@@ -99,7 +99,11 @@ var Home = () => {
 
 
         if (imageData.length === 0) {
-            picshow()
+            picshow(
+                <div className='w-full h-max mt-[10rem] flex flex-row justify-center items-center'>
+                    <h5 className='text-lg' >No Posts For Now</h5>
+                </div>
+            )
         }
         else {
 
@@ -577,7 +581,7 @@ var Home = () => {
                         if (users.email !== cookies.email) {
                             if (users.isFollowed === 0) {
                                 return (
-                                    <div className="w-full  h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly" id={users.email}>
+                                    <div className="w-full  h-12 mt-2 border-t-2 border-b-2 border-lime-500 flex flex-row justify-center items-center justify-evenly" id={users.email}>
                                         <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={users.profimg} alt="userpp" />
                                         <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
                                         <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { followmech(event) }}>follow</button>
@@ -586,7 +590,7 @@ var Home = () => {
                             }
                             else {
                                 return (
-                                    <div id={users.email} className="w-full h-12 mt-2 border-2 rounded-md border-lime-500 flex flex-row justify-center items-center justify-evenly">
+                                    <div id={users.email} className="w-full h-12 mt-2 border-t-2 border-b-2  border-lime-500 flex flex-row justify-center items-center justify-evenly">
                                         <img className='w-8 h-8 rounded-2xl' onClick={(umail) => { show_oth_prof(umail) }} id={users.email} src={users.profimg} alt="userpp" />
                                         <p className='text-gray-900' onClick={(umail) => { show_oth_prof(umail) }} id={users.email}>{users.name}</p>
                                         <button className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm" id={"follow_btn" + j} onClick={(event) => { unfollowmech(event) }}>unfollow</button>
@@ -729,13 +733,13 @@ var Home = () => {
             onKeyDown={toggleDrawer(anchor, false)}
             className="w-full h-1/3 flex flex-col items-start justify-center "
         >
-            <div className="w-full h-12 border-b-2 border-pink-300 flex flex-row justify-center items-start">
+            <div className="w-full h-12 border-b-2 mt-4 border-pink-300 flex flex-row justify-center items-center">
                 <Typography variant="h5" color="primary">Menu</Typography>
             </div>
-            <Button className="w-full h-12" style={{ color: "#4BB543", marginTop: "1rem" }} color="secondary" variant="outlined" startIcon={<HomeRoundedIcon />} onClick={() => { homesw() }}>Home</Button>
-            <Button className="w-full h-12" style={{ marginTop: "1rem" }} color="primary" variant="outlined" startIcon={<PersonSearchRoundedIcon />} onClick={() => { show_mob_searchbar() }} >Search People</Button>
-            <Button className="w-full h-12" style={{ marginTop: "1rem" }} color="secondary" variant="outlined" startIcon={<PersonIcon />} onClick={() => { profsw() }}>User</Button>
-            <Button className="w-full h-12" style={{ color: "red", marginTop: "1rem" }} color="secondary" variant="outlined" startIcon={<ExitToAppRoundedIcon />} onClick={() => { logout() }} >Logout</Button>
+            <Button className="w-full h-12" style={{ color: "#4BB543", marginTop: "1rem", borderRadius:"0px"}} color="secondary" variant="outlined" startIcon={<HomeRoundedIcon />} onClick={() => { homesw() }}>Home</Button>
+            <Button className="w-full h-12" style={{ marginTop: "1rem" , borderRadius:"0px" }} color="primary" variant="outlined" startIcon={<PersonSearchRoundedIcon />} onClick={() => { show_mob_searchbar() }} >Search People</Button>
+            <Button className="w-full h-12" style={{ marginTop: "1rem" , borderRadius:"0px" }} color="secondary" variant="outlined" startIcon={<PersonIcon />} onClick={() => { profsw() }}>User</Button>
+            <Button className="w-full h-12" style={{ color: "red", marginTop: "1rem" , borderRadius:"0px" }} color="secondary" variant="outlined" startIcon={<ExitToAppRoundedIcon />} onClick={() => { logout() }} >Logout</Button>
 
         </Box>
     );
