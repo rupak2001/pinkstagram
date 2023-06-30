@@ -36,7 +36,7 @@ require('dotenv').config();
 
 const dbURL =
     process.env.NODE_ENV === "development"
-        ? "mongodb://127.0.0.1:27017/ig_data"
+        ? "mongodb://127.0.0.1:27017/pinkstagram_db"
         : "mongodb+srv://rupak:" +
           process.env.password +
           "@pinkstagram-db.2svpk.mongodb.net/pinkstagram?retryWrites=true&w=majority";
