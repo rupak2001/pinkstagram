@@ -760,7 +760,16 @@ var Home = () => {
         feed_feeder();
     }
 
+
+
     //show people in the search bar
+
+    document.addEventListener("mousedown",(e)=>{
+        if(e.target.className.substr(0,14) !== "searchboxupper"){
+            document.getElementById("searchbar").value = ""
+            searchup()
+        }
+    })
     async function search_peps() {
         await fetch(
             `${serverURL}/search_people/` +
@@ -774,10 +783,10 @@ var Home = () => {
                     searchup(
                         <div
                             id="searchlstbx"
-                            className="w-80 h-80 mx-[5.5%] bg-white border-2 border-pink-400/70 fixed top-0 left-0 mt-12"
+                            className="searchboxupper w-80 h-80 mx-[5.5%] bg-white border-2 border-pink-400/70 fixed top-0 left-0 mt-12"
                         >
                             <br />
-                            <p style={{ textAlign: "center" }}>no user found</p>
+                            <p className="searchboxupper"style={{ textAlign: "center" }}>no user found</p>
                         </div>
                     );
                 } else {
@@ -789,11 +798,11 @@ var Home = () => {
                             if (users.isFollowed === 0) {
                                 return (
                                     <div
-                                        className="w-full  h-12 mt-2 border-t-2 border-b-2 border-lime-500 flex flex-row justify-center items-center justify-evenly"
+                                        className="searchboxupper w-full  h-12 mt-2 border-t-2 border-b-2 border-lime-500 flex flex-row justify-center items-center justify-evenly"
                                         id={users.email}
                                     >
                                         <img
-                                            className="w-8 h-8 rounded-2xl"
+                                            className="searchboxupper w-8 h-8 rounded-2xl"
                                             onClick={(umail) => {
                                                 show_oth_prof(umail);
                                             }}
@@ -802,7 +811,7 @@ var Home = () => {
                                             alt="userpp"
                                         />
                                         <p
-                                            className="text-gray-900"
+                                            className="searchboxupper text-gray-900"
                                             onClick={(umail) => {
                                                 show_oth_prof(umail);
                                             }}
@@ -811,7 +820,7 @@ var Home = () => {
                                             {users.name}
                                         </p>
                                         <button
-                                            className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm"
+                                            className="searchboxupper w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm"
                                             id={"follow_btn" + j}
                                             onClick={(event) => {
                                                 followmech(event);
@@ -825,10 +834,10 @@ var Home = () => {
                                 return (
                                     <div
                                         id={users.email}
-                                        className="w-full h-12 mt-2 border-t-2 border-b-2  border-lime-500 flex flex-row justify-center items-center justify-evenly"
+                                        className="searchboxupper w-full h-12 mt-2 border-t-2 border-b-2  border-lime-500 flex flex-row justify-center items-center justify-evenly"
                                     >
                                         <img
-                                            className="w-8 h-8 rounded-2xl"
+                                            className="searchboxupper w-8 h-8 rounded-2xl"
                                             onClick={(umail) => {
                                                 show_oth_prof(umail);
                                             }}
@@ -837,7 +846,7 @@ var Home = () => {
                                             alt="userpp"
                                         />
                                         <p
-                                            className="text-gray-900"
+                                            className="searchboxupper text-gray-900"
                                             onClick={(umail) => {
                                                 show_oth_prof(umail);
                                             }}
@@ -846,7 +855,7 @@ var Home = () => {
                                             {users.name}
                                         </p>
                                         <button
-                                            className="w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm"
+                                            className="searchboxupper w-16 bg-teal-200 text-gray-800 h-6 rounded-lg text-sm"
                                             id={"follow_btn" + j}
                                             onClick={(event) => {
                                                 unfollowmech(event);
@@ -862,7 +871,7 @@ var Home = () => {
                     searchup(
                         <div
                             id="searchlstbx"
-                            className="w-80 h-80 mx-[5.5%] bg-white border-2 border-pink-400/70 overflow-y-auto fixed top-0 left-0 mt-12"
+                            className="searchboxupper w-80 h-80 mx-[5.5%] bg-white border-2 border-pink-400/70 overflow-y-auto fixed top-0 left-0 mt-12"
                         >
                             {userdat}
                         </div>
@@ -871,6 +880,8 @@ var Home = () => {
             })
             .catch((err) => searchup());
     }
+
+    
 
     async function search_peps_mob() {
         await fetch(

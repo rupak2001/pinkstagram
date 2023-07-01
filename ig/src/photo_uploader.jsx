@@ -63,7 +63,7 @@ var Pic_up = (props) => {
         <div id="control_box1" className='w-full h-32 bottom-0 flex flex-col fixed justify-end items-center '>
             <input id="descbox" className='h-10 w-full sm:w-1/3 rounded-none outline-none text-center border-2 border-solid border-pink-500' type="text" placeholder="enter description"></input>
             <div id="updiv" className='bg-white w-full h-16 md:h-12 md:w-1/2  flex flex-row justify-around items-center'>
-                <input type="file" className='w-1/2 text-sm h-1/2 outline-none cursor-pointer ' accept="image/*" name="file" onChange={onChange} />
+                <input type="file" className='w-1/2 text-sm h-[55%] outline-none cursor-pointer ' accept="image/*" name="file" onChange={onChange} />
                 <p id="email_extractor" style={{ display: "none" }}>{props.finname}</p>
                 <Button
                     variant="contained"
