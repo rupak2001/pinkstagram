@@ -3,61 +3,50 @@ var db = require('./schema/sch_mod_login.js');
 var dbi = require('./schema/sch_mod_imgstr.js');
 var profmod = require("./schema/sch_mod_pep.js")
 var PORT = process.env.PORT || 8000;
-const multer = require('multer');
-var fs = require('fs')
 var bodyparser = require('body-parser')
 var express = require('express');
 var app = express();
 var cors = require('cors');
-
+const bcrypt = require('bcrypt');
 app.use(cors());
 app.use(bodyparser.json({limit: '50mb'}));
 app.use(bodyparser.urlencoded({limit: '50mb', extended: true}));
-app.set("view engine", "ejs")
 
 
-/*var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './uploads');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + file.originalname);
-    }
-})
-
-var upload = multer({ storage: storage })*/
-
-
-//login mechanism
+//login
 app.post('/login_post', async (req, res) => {
     var catched_data = req.body;
     usermail = catched_data.email;
     var db_data = await db.find({ email: catched_data.email }).select({ email: 1, password: 1, _id: 0 });
-    console.log(db_data)
     if (db_data.length === 0) {
-        res.send({ chk_status: 0 });
+        res.status(404).send()
     }
-    else if (catched_data.email === db_data[0].email && catched_data.password === db_data[0].password) {
-        res.send({ chk_status: 1 });
+    else if (catched_data.email === db_data[0].email && await bcrypt.compare(catched_data.password, db_data[0].password)  === true) {
+        res.status(200).send()
+
 
     }
-    else if (catched_data.email === db_data[0].email && catched_data.password !== db_data[0].password) {
-        res.send({ chk_status: 2 });
+    else if (catched_data.email === db_data[0].email && await bcrypt.compare(catched_data.password, db_data[0].password)  === false) {
+        res.status(401).send()     
     }
 })
 
+
+
+//signup
 app.post('/new_user_add', async (req, res) => {
     var catched_data = req.body;
     var db_data = await db.find({ email: catched_data.email });
     if (db_data.length !== 0) {
-        res.send({ status_add: 0 })
+        res.status(403).send()
     }
     else {
-        var ndb = new db(req.body);
+        catched_data.password = await bcrypt.hash(catched_data.password, 10);
+        var ndb = new db(catched_data);
         var profmaker = new profmod({ email: catched_data.email, name: catched_data.name })
         await profmod.insertMany([profmaker])
         await db.insertMany([ndb]);
-        res.send({ status_add: 1 });
+        res.status(200).send();
     }
 })
 
@@ -192,14 +181,14 @@ app.post("/editname/:email", async (req, res) => {
     await profmod.updateOne({ email: req.params.email }, { $set: { name: req.body.name } })
 })
 
-app.post("/editpass/:email", async (req, res) => {
-    var actpass = await db.find({ email: req.params.email }).select({ password: 1, _id: 0 })
-    if (req.body.oldpass === actpass[0].password) {
-        await db.updateOne({ email: req.params.email }, { $set: { password: req.body.newpass } })
-        res.send({ is_changed: 1 })
+app.post("/editpass", async (req, res) => {
+    var actpass = await db.find({ email: req.body.email }).select({ password: 1, _id: 0 })
+    if (await bcrypt.compare(req.body.oldpass , actpass[0].password) == true) {
+        await db.updateOne({ email: req.body.email }, { $set: { password: await bcrypt.hash(req.body.newpass,10)} })
+        res.status(200).send()
     }
     else {
-        res.send({ is_changed: 0 })
+        res.status(403).send()
     }
 })
 

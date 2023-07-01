@@ -1,6 +1,6 @@
 import React from 'react'
-import Button from '@material-ui/core/Button';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Button from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useState } from 'react'
 import serverURL from './utils/url';
 
